@@ -18,6 +18,12 @@ Um sistema web simples desenvolvido com **Node.js + Express** (JavaScript) e **H
 
 ```
 simple-web-app/
+├── .gitignore
+├── EXPLICACAO_CODIGO.md
+├── RESUMO_SEGURANCA.md
+├── package-lock.json
+├── package.json
+├── SEGURANCA1.md
 ├── server.js              # Servidor Express com APIs
 ├── package.json           # Dependências do projeto
 ├── README.md              # Este arquivo
