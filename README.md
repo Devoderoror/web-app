@@ -2,6 +2,14 @@
 
 Um sistema web simples desenvolvido com **Node.js + Express** (JavaScript) e **HTML + Bootstrap**, com funcionalidades de autenticação e gerenciamento de três cadastros (Usuários, Clientes e Fornecedores).
 
+Projeto de Segurança - Relatório de Vulnerabilidade de Segurança
+
+https://github.com/Devoderoror/web-app/blob/main/SEGURANCA.md
+
+Resumo de Segurança e Vulnerabilidades - Sumário Executivo
+
+https://github.com/Devoderoror/web-app/blob/main/RESUMO_SEGURANCA.md
+
 ## Requisitos Atendidos
 
 - ✅ **Publicado na Web** - Pronto para deploy
