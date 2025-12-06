@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Super Sistemas - Principal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="bg-light min-vh-100 d-flex flex-column">
+  <div id="menu"></div>
+  
+  <main id="principal" class="container-fluid flex-fill d-flex align-items-center justify-content-center">
+    <div class="p-5 bg-white shadow rounded text-center">
+      <h1 class="mb-3">Bem-vindo!</h1>
+      <p class="lead" id="nomeUsuario"></p>
+      <hr>
+      <p>Acesse os cadastros pelo menu acima.</p>
+    </div>
+  </main>
+
+  <div id="rodape"></div>
+
+  <script>
+    fetch('/menu.html').then(r => r.text()).then(h => document.getElementById('menu').innerHTML = h);
+    fetch('/rodape.html').then(r => r.text()).then(h => document.getElementById('rodape').innerHTML = h);
+
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    if (!usuario.id) {
+      window.location.href = '/';
+    } else {
+      document.getElementById('nomeUsuario').textContent = `Olá, ${usuario.nome}!`;
+    }
+
+    function logout() {
+      localStorage.removeItem('usuario');
+      fetch('/api/logout', { method: 'POST' });
+    }
+  </script>
+</body>
+</html>

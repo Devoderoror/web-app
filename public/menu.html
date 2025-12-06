@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Super Sistemas</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/principal.html">Início</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="cadastrosDropdown" role="button" data-bs-toggle="dropdown">
+            Cadastros
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="cadastrosDropdown">
+            <li><a class="dropdown-item" href="/usuario/usuario_listar.html">Usuários</a></li>
+            <li><a class="dropdown-item" href="/cliente/cliente_listar.html">Clientes</a></li>
+	            <li><a class="dropdown-item" href="/fornecedor/fornecedor_listar.html">Fornecedores</a></li>
+	            <li><hr class="dropdown-divider"></li>
+	            <li><a class="dropdown-item" href="/2fa_settings.html">Configurações de 2FA</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/" onclick="logout()">Sair</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

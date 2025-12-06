@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Super Sistemas - Listar Fornecedores</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="bg-light min-vh-100 d-flex flex-column">
+  <div id="menu"></div>
+  
+  <main id="principal" class="container-fluid flex-fill d-flex align-items-start justify-content-center px-4 py-4">
+    <div class="card shadow p-4 w-100">
+      <h2 class="mb-4">Fornecedores - Listar</h2>
+      
+      <div class="mb-3">
+        <button type="button" class="btn btn-primary me-2" onclick="window.location.href='/fornecedor/fornecedor_incluir.html'">Incluir</button>
+        <button type="button" class="btn btn-primary me-2" onclick="editar()">Editar</button>
+        <button type="button" class="btn btn-danger" onclick="excluir()">Excluir</button>
+      </div>
+      
+      <table class="table table-striped table-hover align-middle">
+        <thead class="table-primary">
+          <tr>
+            <th><input type="checkbox" id="checkTodos"></th>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Telefone</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaFornecedores"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <div id="rodape"></div>
+
+  <script>
+    fetch('/menu.html').then(r => r.text()).then(h => document.getElementById('menu').innerHTML = h);
+    fetch('/rodape.html').then(r => r.text()).then(h => document.getElementById('rodape').innerHTML = h);
+
+    async function carregarFornecedores() {
+      try {
+        const response = await fetch('/api/fornecedores');
+        const fornecedores = await response.json();
+        const tbody = document.getElementById('tabelaFornecedores');
+        tbody.innerHTML = '';
+        
+        fornecedores.forEach(f => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><input type="checkbox" class="fornecedor-check" value="${f.id}"></td>
+            <td>${f.id}</td>
+            <td>${f.nome}</td>
+            <td>${f.email}</td>
+            <td>${f.telefone}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (error) {
+        console.error('Erro:', error);
+      }
+    }
+
+    function editar() {
+      const marcados = document.querySelectorAll('input.fornecedor-check:checked');
+      if (marcados.length === 0) {
+        alert("Selecione um fornecedor para editar.");
+        return;
+      }
+      if (marcados.length > 1) {
+        alert("Selecione apenas um fornecedor para editar.");
+        return;
+      }
+      const id = marcados[0].value;
+      window.location.href = `/fornecedor/fornecedor_editar.html?id=${id}`;
+    }
+
+    function excluir() {
+      const marcados = document.querySelectorAll('input.fornecedor-check:checked');
+      if (marcados.length === 0) {
+        alert("Selecione um fornecedor para excluir.");
+        return;
+      }
+      if (confirm("Tem certeza que deseja excluir?")) {
+        marcados.forEach(async (checkbox) => {
+          const id = checkbox.value;
+          try {
+            await fetch(`/api/fornecedores/${id}`, { method: 'DELETE' });
+            carregarFornecedores();
+          } catch (error) {
+            console.error('Erro:', error);
+          }
+        });
+      }
+    }
+
+    document.getElementById('checkTodos').addEventListener('change', (e) => {
+      document.querySelectorAll('input.fornecedor-check').forEach(cb => cb.checked = e.target.checked);
+    });
+
+    carregarFornecedores();
+  </script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Editar Cliente - Super Sistemas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="bg-light min-vh-100 d-flex flex-column">
+  <div id="menu"></div>
+  
+  <main id="principal" class="container-fluid flex-fill d-flex align-items-start justify-content-center px-4 py-4">
+    <div class="card shadow p-4 w-100" style="max-width: 600px;">
+      <h2 class="mb-4">Cliente - Editar</h2>
+      <form id="formCliente">
+        <div class="mb-3">
+          <button type="button" class="btn btn-secondary" onclick="window.location.href='/cliente/cliente_listar.html'">Voltar</button>
+          <button type="submit" class="btn btn-success me-2">Gravar</button>
+        </div>
+
+        <div class="mb-3">
+          <label for="id" class="form-label">ID</label>
+          <input type="text" id="id" class="form-control" readonly disabled>
+        </div>
+
+        <div class="mb-3">
+          <label for="nome" class="form-label">Nome</label>
+          <input type="text" id="nome" name="nome" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">E-mail</label>
+          <input type="email" id="email" name="email" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="telefone" class="form-label">Telefone</label>
+          <input type="text" id="telefone" name="telefone" class="form-control" required>
+        </div>
+      </form>
+      <div id="mensagem"></div>
+    </div>
+  </main>
+
+  <div id="rodape"></div>
+
+  <script>
+    fetch('/menu.html').then(r => r.text()).then(h => document.getElementById('menu').innerHTML = h);
+    fetch('/rodape.html').then(r => r.text()).then(h => document.getElementById('rodape').innerHTML = h);
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+
+    async function carregarCliente() {
+      try {
+        const response = await fetch('/api/clientes');
+        const clientes = await response.json();
+        const cliente = clientes.find(c => c.id === parseInt(id));
+        
+        if (cliente) {
+          document.getElementById('id').value = cliente.id;
+          document.getElementById('nome').value = cliente.nome;
+          document.getElementById('email').value = cliente.email;
+          document.getElementById('telefone').value = cliente.telefone;
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+      }
+    }
+
+    document.getElementById('formCliente').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const dados = {
+        nome: document.getElementById('nome').value,
+        email: document.getElementById('email').value,
+        telefone: document.getElementById('telefone').value
+      };
+
+      try {
+        const response = await fetch(`/api/clientes/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dados)
+        });
+        
+        const data = await response.json();
+        if (data.sucesso) {
+          alert('Cliente atualizado com sucesso!');
+          window.location.href = '/cliente/cliente_listar.html';
+        } else {
+          document.getElementById('mensagem').innerHTML = '<div class="alert alert-danger">Erro ao atualizar!</div>';
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+        document.getElementById('mensagem').innerHTML = '<div class="alert alert-danger">Erro ao conectar!</div>';
+      }
+    });
+
+    carregarCliente();
+  </script>
+</body>
+</html>
